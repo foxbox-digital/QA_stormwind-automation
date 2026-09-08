@@ -53,7 +53,7 @@ class StudentCourseDetailsSupplementsPage extends BasePage {
      * Navigate to Python Foundations course page
      */
     async goto() {
-        await this.page.goto('https://test-spectre.pantheonsite.io/stormwind-developer/python/python-foundations');
+        await this.page.goto('/stormwind-developer/python/python-foundations');
         await this.page.waitForLoadState('domcontentloaded');
     }
 

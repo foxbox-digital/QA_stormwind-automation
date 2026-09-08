@@ -11,7 +11,7 @@ test.describe('Student - Course Details Page', () => {
 
     test('should validate course details page and add/remove course from classroom', async ({ studentCourseDetails }) => {
         // Navigate directly to the course details page
-        await studentCourseDetails.goto('https://test-spectre.pantheonsite.io/stormwind-developer/ai-and-chatgpt/coding-ai-copilot');
+        await studentCourseDetails.goto('/stormwind-developer/ai-and-chatgpt/coding-ai-copilot');
 
         // ========== RESET STATE IF NEEDED ==========
         // If course is already added, remove it first to ensure clean state

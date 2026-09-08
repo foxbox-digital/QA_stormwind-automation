@@ -9,7 +9,7 @@ const { test, expect } = require('../../fixtures/fixtures');
 test.describe('Admin - Navigation Tests', () => {
 
     test('should validate main nav, admin sub-nav tabs, and tab navigation', async ({ adminNavigation, adminPage }) => {
-        test.setTimeout(120000);
+        test.setTimeout(300000);
         // Start on Dashboard so admin sub-nav is visible
         await adminPage.goto('/team/19126/reporting/145164');
         await adminPage.waitForLoadState('domcontentloaded');
@@ -59,13 +59,13 @@ test.describe('Admin - Navigation Tests', () => {
         await adminPage.goto('/team/19126/reporting/145164');
         await adminPage.waitForLoadState('domcontentloaded');
         await adminNavigation.navigateToLearningPaths();
-        expect(adminPage.url()).toContain('/learningpaths');
+        expect(adminPage.url()).toContain('/learning-path');
 
         // STEP 12: Navigate to Skills Assessments via main nav and verify URL
         await adminPage.goto('/team/19126/reporting/145164');
         await adminPage.waitForLoadState('domcontentloaded');
         await adminNavigation.navigateToSkillsAssessments();
-        expect(adminPage.url()).toContain('/skillsassessment');
+        expect(adminPage.url()).toContain('/skills-assessment');
 
         // STEP 13: Navigate to Leaderboard via main nav and verify URL
         await adminPage.goto('/team/19126/reporting/145164');

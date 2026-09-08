@@ -57,4 +57,32 @@ test.describe('Student - My Classroom Page', () => {
         expect(await studentMyClassroom.isOnCorrectURL()).toBeTruthy();
         await studentMyClassroom.allFilterPill.click();
     });
+
+    test('should reflect status breakdown in filter counts and toggle the active pill', async ({ studentMyClassroom }) => {
+        // STEP 1: Navigate to My Classroom
+        await studentMyClassroom.navigateFromNav();
+
+        // STEP 2: Read the count badges embedded in the three filter pills
+        const { all, inProgress, completed } = await studentMyClassroom.getFilterCounts();
+
+        // STEP 3: Assert the counts are sane and the two statuses are subsets of All
+        // (In progress and Completed are disjoint subsets, so their sum cannot exceed All)
+        expect(all).toBeGreaterThan(0);
+        expect(inProgress).toBeLessThanOrEqual(all);
+        expect(completed).toBeLessThanOrEqual(all);
+        expect(inProgress + completed).toBeLessThanOrEqual(all);
+
+        // STEP 4: Clicking "In progress" makes it the active pill and deactivates "All"
+        await studentMyClassroom.clickInProgressFilter();
+        await expect(studentMyClassroom.inProgressFilterPill).toHaveClass(/active/);
+        await expect(studentMyClassroom.allFilterPill).not.toHaveClass(/active/);
+
+        // STEP 5: Clicking "Completed" moves the active state to it
+        await studentMyClassroom.clickCompletedFilter();
+        await expect(studentMyClassroom.completedFilterPill).toHaveClass(/active/);
+
+        // STEP 6: Reset back to "All" and confirm it is active again
+        await studentMyClassroom.allFilterPill.click();
+        await expect(studentMyClassroom.allFilterPill).toHaveClass(/active/);
+    });
 });

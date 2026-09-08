@@ -74,7 +74,7 @@ class StudentCourseLessonsPage extends BasePage {
      * Navigate to a specific course lessons page
      * @param {string} url - Full URL or path
      */
-    async goto(url = 'https://test-spectre.pantheonsite.io/replay/106477/course-overview') {
+    async goto(url = '/replay/106477/course-overview') {
         await this.page.goto(url);
         await this.page.waitForLoadState('domcontentloaded');
     }

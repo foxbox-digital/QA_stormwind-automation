@@ -9,7 +9,8 @@ class LoginPage extends BasePage {
         this.enterButton = page.getByRole('button', { name: 'Enter' });
         this.passwordInput = page.getByRole('textbox', { name: 'Password' });
         this.loginButton = page.getByRole('button', { name: 'Log in' });
-        this.errorMessage = page.locator('.error-message');
+        // Login errors render as a role="alert" region (there is no `.error-message` class).
+        this.errorAlert = page.getByRole('alert');
     }
 
     async goto() {
@@ -42,16 +43,35 @@ class LoginPage extends BasePage {
     }
 
     async isErrorMessageDisplayed() {
-        return await this.errorMessage.isVisible();
+        return await this.errorAlert.isVisible();
     }
 
     async getErrorMessage() {
-        return await this.errorMessage.textContent();
+        return await this.errorAlert.textContent();
     }
 
     async expectErrorMessage(expectedText) {
-        await this.expectVisible(this.errorMessage);
-        await this.expectText(this.errorMessage, expectedText);
+        await this.expectVisible(this.errorAlert);
+        await this.expectText(this.errorAlert, expectedText);
+    }
+
+    // REUSE_METHOD: expectStillOnLogin
+    async expectStillOnLogin() {
+        await this.expectUrl(/\/user\/login/);
+    }
+
+    // REUSE_METHOD: expectRedirectedToClassroom
+    async expectRedirectedToClassroom() {
+        await this.expectUrl(/\/my_classroom\//);
+    }
+
+    // REUSE_METHOD: expectRedirectedToTeamReporting
+    async expectRedirectedToTeamReporting() {
+        await this.expectUrl(/\/team\/\d+\/reporting/);
+    }
+
+    async expectEmailFieldHidden() {
+        await this.expectHidden(this.emailInput);
     }
 }
 

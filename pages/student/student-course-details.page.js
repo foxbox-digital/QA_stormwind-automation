@@ -29,6 +29,12 @@ class StudentCourseDetailsPage extends BasePage {
         // After adding to classroom
         this.progressComplete = page.getByText(/\d+% complete/);
         this.startBtn = page.getByRole('link', { name: /START/i });
+        // Redesigned toggle: a single js-course-flag button whose label flips between
+        // "Add to Classroom" and "Remove from Classroom". In the added state it reads
+        // "Remove from Classroom" (the same-named <a> fallbacks are role=link and hidden,
+        // so scoping to role=button targets the one visible control).
+        this.removeFromClassroomBtn = page.getByRole('button', { name: /Remove from Classroom/i });
+        // Legacy checkmark locator kept for backward compat; superseded by removeFromClassroomBtn.
         this.checkmarkBtn = page.locator('button.btn-circle.js-course-flag, button.btn-circle:has(i.fa-check)');
 
         // Overview section
@@ -70,7 +76,7 @@ class StudentCourseDetailsPage extends BasePage {
      * Navigate directly to the course details page
      * @param {string} url - Full URL or path to navigate to
      */
-    async goto(url = 'https://test-spectre.pantheonsite.io/stormwind-developer/ai-and-chatgpt/coding-ai-copilot') {
+    async goto(url = '/stormwind-developer/ai-and-chatgpt/coding-ai-copilot') {
         await this.page.goto(url);
         await this.page.waitForLoadState('domcontentloaded');
     }
@@ -98,10 +104,24 @@ class StudentCourseDetailsPage extends BasePage {
     }
 
     /**
-     * Click checkmark button to remove course from classroom
+     * Remove the course from the classroom. The toggle unflags via AJAX, but the
+     * in-place UI does not reliably revert to "ADD TO CLASSROOM" — a reload makes
+     * the not-added state authoritative (mirrors a full unflag navigation).
+     */
+    // REUSE_METHOD: clickRemoveFromClassroom
+    async clickRemoveFromClassroom() {
+        await this.removeFromClassroomBtn.click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.reload();
+        await this.page.waitForLoadState('domcontentloaded');
+    }
+
+    /**
+     * Backward-compatible alias for the old checkmark control (now the
+     * "Remove from Classroom" CTA). Kept because specs call this name.
      */
     async clickCheckmarkButton() {
-        await this.checkmarkBtn.click();
+        await this.clickRemoveFromClassroom();
     }
 
     /**
@@ -264,10 +284,11 @@ class StudentCourseDetailsPage extends BasePage {
     }
 
     /**
-     * Assert checkmark button is visible (after adding to classroom)
+     * Assert the course is in the added state — the "Remove from Classroom"
+     * control is visible (name kept for backward compat with existing specs).
      */
     async expectCheckmarkBtnVisible() {
-        await this.expectVisible(this.checkmarkBtn);
+        await this.expectVisible(this.removeFromClassroomBtn);
     }
 
     /**

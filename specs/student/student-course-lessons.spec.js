@@ -10,7 +10,7 @@ test.describe('Student - Course Lessons Page', () => {
 
     test('should navigate to lessons page via Resume and validate TOC with modules and lessons', async ({ studentPage, studentCourseLessons }) => {
         // 1. Navigate to Microsoft Azure for .NET Developers course details page
-        await studentPage.goto('https://test-spectre.pantheonsite.io/stormwind-developer/microsoft-net-development/microsoft-azure-net-developers');
+        await studentPage.goto('/stormwind-developer/microsoft-net-development/microsoft-azure-net-developers');
         await studentPage.waitForLoadState('domcontentloaded');
 
         // 2. Validate we're on the course details page

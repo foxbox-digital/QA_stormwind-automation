@@ -118,6 +118,30 @@ class StudentMyClassroomPage extends BasePage {
         return await this.overdueBadges.count();
     }
 
+    // Read the count badge embedded in a filter pill label, e.g. "In progress 13" → 13.
+    // The classroom course list is not exposed via a stable card selector, so the
+    // pill counts are the reliable signal for the status breakdown.
+    async filterPillCount(pill) {
+        const label = (await pill.textContent()) || '';
+        const match = label.match(/(\d+)\s*$/);
+        return match ? parseInt(match[1], 10) : NaN;
+    }
+
+    async getFilterCounts() {
+        // The count badges initialise to "All 0" and then update after an async
+        // fetch, so wait until the "All" pill shows a non-zero total before reading.
+        await this.allFilterPill.waitFor({ state: 'visible' });
+        for (let i = 0; i < 30; i++) {
+            if ((await this.filterPillCount(this.allFilterPill)) > 0) break;
+            await this.page.waitForTimeout(300);
+        }
+        return {
+            all: await this.filterPillCount(this.allFilterPill),
+            inProgress: await this.filterPillCount(this.inProgressFilterPill),
+            completed: await this.filterPillCount(this.completedFilterPill),
+        };
+    }
+
     async expectOverdueBadgeVisible() {
         await this.expectVisible(this.overdueBadge);
     }
