@@ -110,9 +110,10 @@ class StudentCourseDetailsPage extends BasePage {
      */
     // REUSE_METHOD: clickRemoveFromClassroom
     async clickRemoveFromClassroom() {
+        // The "Remove from Classroom" button navigates through the Drupal flag
+        // route and redirects back to this page in the not-added state.
+        // Just wait for the resulting navigation to settle — no manual reload needed.
         await this.removeFromClassroomBtn.click();
-        await this.page.waitForLoadState('networkidle');
-        await this.page.reload();
         await this.page.waitForLoadState('domcontentloaded');
     }
 
