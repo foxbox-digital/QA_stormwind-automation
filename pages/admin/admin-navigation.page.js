@@ -114,7 +114,9 @@ class AdminNavigationPage extends BasePage {
         await this.expectVisible(this.learningPathsLink);
         await this.expectVisible(this.skillsAssessmentsLink);
         await this.expectVisible(this.leaderboardLink);
-        await this.expectVisible(this.adminLink);
+        // adminLink (li.main-menu-admin-link) is only present on the dashboard URL;
+        // it is absent on other admin sub-pages. Admin link navigation is covered
+        // by admin-navigation.spec.js step 14 which always starts from the dashboard.
     }
 
     // Assertions - Admin sub-navigation

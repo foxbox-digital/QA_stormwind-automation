@@ -142,9 +142,8 @@ class AdminDashboardPage extends BasePage {
         await this.expectVisible(this.studentInfoHeading);
         await this.expectVisible(this.studentSearchInput);
         await this.expectVisible(this.addUserBtn);
-        // Scroll table into view before checking visibility
-        await this.studentTable.scrollIntoViewIfNeeded();
-        await this.expectVisible(this.studentTable);
+        // Student list no longer loads on page visit — it's deferred to after a search.
+        // Table assertion removed; metadata (heading + controls) is sufficient.
     }
 
     /**

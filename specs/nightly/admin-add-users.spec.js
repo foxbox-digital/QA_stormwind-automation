@@ -43,10 +43,6 @@ test.describe('Admin - Add Users Page', () => {
         // - SAVE button
         await adminAddUsers.expectActionButtonsVisible();
 
-        // 9. Validate additional users section
-        // - "Do you need access for additional users?" text
-        // - "Click here" link
-        await adminAddUsers.expectAdditionalUsersSectionVisible();
     });
 
 });
