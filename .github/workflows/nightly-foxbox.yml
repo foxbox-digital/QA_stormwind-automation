@@ -1,4 +1,4 @@
-name: Nightly Playwright Tests
+name: Nightly Foxbox Production Tests
 
 on:
   schedule:
@@ -14,11 +14,8 @@ permissions:
 
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
     - name: Checkout code
@@ -33,14 +30,14 @@ jobs:
       run: npm ci
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
 
-    - name: Run Playwright tests
+    - name: Run Foxbox production tests
       id: playwright
       continue-on-error: true
       env:
         PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
-      run: npx playwright test specs/nightly/ --reporter=html,json
+      run: npx playwright test specs/foxbox/ --reporter=html,json
 
     - name: Parse test results
       id: results
@@ -66,24 +63,9 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: playwright-report
+        name: foxbox-playwright-report
         path: playwright-report/
         retention-days: 30
-
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-      if: always()
-
-    - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
-      if: always()
-      with:
-        path: playwright-report/
-
-    - name: Deploy to GitHub Pages
-      id: deploy
-      uses: actions/deploy-pages@v4
-      if: always()
 
     - name: Notify Slack
       if: always()
@@ -91,13 +73,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} Nightly LMS Tests — ${{ steps.results.outputs.summary }}",
+            "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} Nightly Foxbox Tests — ${{ steps.results.outputs.summary }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} *Nightly LMS Tests* — StormWind\n${{ steps.results.outputs.summary }}\n<${{ steps.deploy.outputs.page_url }}|📊 View HTML Report>  ·  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                  "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} *Nightly Foxbox Tests* — foxbox.com\n${{ steps.results.outputs.summary }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
                 }
               }
             ]
