@@ -40,7 +40,7 @@ jobs:
       continue-on-error: true
       env:
         PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
-      run: npx playwright test specs/nightly/ --reporter=html,json
+      run: npx playwright test specs/nightly/ specs/foxbox/ --reporter=html,json
 
     - name: Parse test results
       id: results
@@ -91,13 +91,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} Nightly LMS Tests — ${{ steps.results.outputs.summary }}",
+            "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} Nightly Tests (LMS + Foxbox) — ${{ steps.results.outputs.summary }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} *Nightly LMS Tests* — StormWind\n${{ steps.results.outputs.summary }}\n<${{ steps.deploy.outputs.page_url }}|📊 View HTML Report>  ·  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                  "text": "${{ steps.playwright.outcome == 'success' && '✅' || '❌' }} *Nightly Tests* — LMS + Foxbox\n${{ steps.results.outputs.summary }}\n<${{ steps.deploy.outputs.page_url }}|📊 View HTML Report>  ·  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
                 }
               }
             ]
