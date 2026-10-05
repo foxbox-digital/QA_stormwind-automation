@@ -25,8 +25,8 @@ class StudentSendIdeasPage extends BasePage {
         this.trendingTab = page.getByRole('button', { name: 'Trending' });
 
         // Search and create
-        this.searchButton = page.getByRole('button', { name: 'Search' });
-        this.createPostButton = page.getByRole('button', { name: /Create A New Post/i });
+        this.searchButton = page.getByRole('button', { name: 'Search' }).first();
+        this.createPostButton = page.getByRole('link', { name: /Create A New Post/i });
 
         // Sidebar
         this.mostHelpfulHeading = page.getByText('Most helpful');
@@ -64,8 +64,8 @@ class StudentSendIdeasPage extends BasePage {
         this.newTab = newPage.getByRole('button', { name: 'New' });
         this.topTab = newPage.getByRole('button', { name: 'Top' });
         this.trendingTab = newPage.getByRole('button', { name: 'Trending' });
-        this.searchButton = newPage.getByRole('button', { name: 'Search' });
-        this.createPostButton = newPage.getByRole('button', { name: /Create A New Post/i });
+        this.searchButton = newPage.getByRole('button', { name: 'Search' }).first();
+        this.createPostButton = newPage.getByRole('link', { name: /Create A New Post/i });
         this.mostHelpfulHeading = newPage.getByText('Most helpful');
         this.poweredByFeaturebase = newPage.getByText('Powered by Featurebase');
     }
