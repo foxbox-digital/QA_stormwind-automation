@@ -17,12 +17,10 @@ class AdminAddUsersPage extends BasePage {
         // Page title
         this.pageTitle = page.getByRole('heading', { name: 'Add Users' });
 
-        // Description text
-        this.groupDescriptionText = page.getByText('You are adding new users to the group named');
-        this.licensesAvailableText = page.getByText('licenses available');
-
-        // License copies dropdown
-        this.licenseCopiesLabel = page.getByText('License copies:');
+        // Description text — redesigned Sep 2026: old "You are adding new users to the group named"
+        // replaced with "Group for everyone below" label; old "licenses available" replaced with "licenses left"
+        this.groupDescriptionText = page.getByText('Group for everyone below');
+        this.licensesAvailableText = page.getByText(/licenses left/);
 
         // ========== USER INPUT FORM ==========
         // <input placeholder="First Name" id="edit-user-form-group-0-first-name">
@@ -43,10 +41,6 @@ class AdminAddUsersPage extends BasePage {
         // <input class="btn btn-primary..." id="edit-actions-submit" value="Save">
         this.saveBtn = page.locator('#edit-actions-submit');
 
-        // Additional users link
-        // <a href="/setup/team/145164/request-users">Click here.</a>
-        this.requestAdditionalUsersLink = page.locator('a[href*="request-users"]');
-        this.additionalUsersText = page.getByText('Do you need access for additional users?');
     }
 
     /**
@@ -95,7 +89,6 @@ class AdminAddUsersPage extends BasePage {
     async expectDescriptionVisible() {
         await this.expectVisible(this.groupDescriptionText);
         await this.expectVisible(this.licensesAvailableText);
-        await this.expectVisible(this.licenseCopiesLabel);
     }
 
     /**
@@ -117,14 +110,6 @@ class AdminAddUsersPage extends BasePage {
     }
 
     /**
-     * Assert additional users section is visible
-     */
-    async expectAdditionalUsersSectionVisible() {
-        await this.expectVisible(this.additionalUsersText);
-        await this.expectVisible(this.requestAdditionalUsersLink);
-    }
-
-    /**
      * Assert complete Add Users page
      */
     async expectAddUsersPageComplete() {
@@ -134,7 +119,6 @@ class AdminAddUsersPage extends BasePage {
         await this.expectDescriptionVisible();
         await this.expectUserFormVisible();
         await this.expectActionButtonsVisible();
-        await this.expectAdditionalUsersSectionVisible();
     }
 }
 

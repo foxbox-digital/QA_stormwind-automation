@@ -9,6 +9,7 @@
     "test:ui": "playwright test --ui",
     "test:student": "playwright test specs/student",
     "test:admin": "playwright test specs/admin",
+    "test:foxbox": "playwright test specs/foxbox",
     "report": "playwright show-report"
   },
   "keywords": ["playwright", "testing", "automation", "stormwind"],

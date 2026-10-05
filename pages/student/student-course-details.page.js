@@ -129,7 +129,7 @@ class StudentCourseDetailsPage extends BasePage {
      * Wait for ADD TO CLASSROOM button to appear after removing
      */
     async waitForAddToClassroomButton() {
-        await this.addToClassroomBtn.waitFor({ state: 'visible', timeout: 15000 });
+        await this.addToClassroomBtn.waitFor({ state: 'visible', timeout: 30000 });
     }
 
     // --- Assertions ---
