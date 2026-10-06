@@ -17,10 +17,9 @@ class AdminAddUsersPage extends BasePage {
         // Page title
         this.pageTitle = page.getByRole('heading', { name: 'Add Users' });
 
-        // Description text — redesigned Sep 2026: old "You are adding new users to the group named"
-        // replaced with "Group for everyone below" label; old "licenses available" replaced with "licenses left"
-        this.groupDescriptionText = page.getByText('Group for everyone below');
-        this.licensesAvailableText = page.getByText(/licenses left/);
+        // Description text
+        this.groupDescriptionText = page.getByText(/You are adding new users to the group named/);
+        this.licensesAvailableText = page.getByText(/licenses available/);
 
         // ========== USER INPUT FORM ==========
         // <input placeholder="First Name" id="edit-user-form-group-0-first-name">
