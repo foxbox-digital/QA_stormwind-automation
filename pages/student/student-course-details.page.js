@@ -110,6 +110,8 @@ class StudentCourseDetailsPage extends BasePage {
      */
     // REUSE_METHOD: clickRemoveFromClassroom
     async clickRemoveFromClassroom() {
+        // The notification popup can appear over the × button and intercept the click.
+        await this.dismissNotificationPopup();
         // The "Remove from Classroom" button navigates through the Drupal flag
         // route and redirects back to this page in the not-added state.
         // Just wait for the resulting navigation to settle — no manual reload needed.

@@ -101,6 +101,14 @@ class BasePage {
     async takeScreenshot(name) {
         await this.page.screenshot({ path: `screenshots/${name}.png` });
     }
+
+    // Dismiss the "Stay in the loop" notification popup if it appears
+    async dismissNotificationPopup() {
+        const notNowBtn = this.page.getByRole('button', { name: 'Not Now' });
+        if (await notNowBtn.isVisible()) {
+            await notNowBtn.click();
+        }
+    }
 }
 
 module.exports = BasePage;
