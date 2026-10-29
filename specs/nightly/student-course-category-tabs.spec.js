@@ -155,7 +155,7 @@ test.describe('Student - Course Category Tabs', () => {
         await studentCategoryTabs.expectScrollRightInactive();
 
         // STEP 4: Scroll back left until left chevron becomes inactive again
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 12; i++) {
             if (await studentCategoryTabs.scrollLeftButtonActive.count() === 0) break;
             await studentCategoryTabs.clickScrollLeft();
             await studentCategoryTabs.page.waitForTimeout(300);

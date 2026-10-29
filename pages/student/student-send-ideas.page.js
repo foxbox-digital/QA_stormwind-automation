@@ -1,7 +1,7 @@
 const BasePage = require('../base.page');
 
 /**
- * StudentSendIdeasPage - Send Ideas feedback portal (opens in new tab)
+ * StudentSendIdeasPage - Send Ideas feedback portal
  * External site: feedback.stormwindstudios.com
  * Powered by Featurebase
  */
@@ -34,21 +34,18 @@ class StudentSendIdeasPage extends BasePage {
     }
 
     /**
-     * Open Send Ideas in new tab from sidebar
-     * @param {import('@playwright/test').BrowserContext} context - Browser context
+     * Navigate the current page to Send Ideas from the sidebar
      * @param {import('@playwright/test').Page} currentPage - Current page
-     * @returns {Promise<import('@playwright/test').Page>} New tab page
+     * @returns {Promise<import('@playwright/test').Page>} Page displaying Send Ideas
      */
-    async openFromSidebar(context, currentPage) {
+    async openFromSidebar(currentPage = this.page) {
         const sendIdeasLink = currentPage.getByRole('link', { name: ' Send Ideas' }).first();
-
-        const [newPage] = await Promise.all([
-            context.waitForEvent('page'),
+        await Promise.all([
+            currentPage.waitForURL(/feedback\.stormwindstudios\.com/, { timeout: 30000 }),
             sendIdeasLink.click()
         ]);
-
-        await newPage.waitForLoadState('domcontentloaded');
-        return newPage;
+        this.setPage(currentPage);
+        return currentPage;
     }
 
     /**
