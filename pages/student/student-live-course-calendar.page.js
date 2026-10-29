@@ -3,7 +3,7 @@ const StudentNavigationPage = require('./student-navigation.page');
 const StudentFooterPage = require('./student-footer.page');
 
 /**
- * StudentLiveCourseCalendarPage - Live Course Calendar (opens in new tab)
+ * StudentLiveCourseCalendarPage - Live Course Calendar
  * URL: /calendar/*
  */
 class StudentLiveCourseCalendarPage extends BasePage {
@@ -33,24 +33,10 @@ class StudentLiveCourseCalendarPage extends BasePage {
     }
 
     /**
-     * Click Live Course Calendar link and wait for new tab to open
-     * @returns {Promise<Page>} The new page/tab that opens
+     * Create an instance for the page displaying the calendar
      */
-    async clickCalendarAndGetNewTab(context, navigationPage) {
-        const [newPage] = await Promise.all([
-            context.waitForEvent('page'),
-            navigationPage.sidebarLiveCourseCalendar.click()
-        ]);
-
-        await newPage.waitForLoadState('domcontentloaded');
-        return newPage;
-    }
-
-    /**
-     * Create a new instance with the new page context
-     */
-    static createForNewTab(newPage) {
-        return new StudentLiveCourseCalendarPage(newPage);
+    static createForPage(page) {
+        return new StudentLiveCourseCalendarPage(page);
     }
 
     // Navigation

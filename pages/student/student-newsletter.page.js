@@ -2,7 +2,7 @@ const BasePage = require('../base.page');
 const StudentNavigationPage = require('./student-navigation.page');
 
 /**
- * StudentNewsletterPage - Newsletter page (external link, opens in new tab)
+ * StudentNewsletterPage - Newsletter page (external link)
  * URL: partners.stormwind.com/*-newsletter/
  * Note: Content changes frequently, only verify page opens correctly
  */
@@ -13,51 +13,49 @@ class StudentNewsletterPage extends BasePage {
     }
 
     /**
-     * Click newsletter link and wait for new tab to open
-     * @param {BrowserContext} context - Playwright browser context
-     * @returns {Promise<Page>} The new page/tab that opens
+     * Click the newsletter link and wait for the current page to navigate
+     * @returns {Promise<Page>} The page displaying the newsletter
      */
-    async clickNewsletterAndGetNewTab(context) {
-        const [newPage] = await Promise.all([
-            context.waitForEvent('page'),
+    async clickNewsletterAndNavigate() {
+        await Promise.all([
+            this.page.waitForURL(/partners\.stormwind\.com\/.*newsletter/i, { timeout: 30000 }),
             this.navigation.sidebarNewsletter.click()
         ]);
-
-        await newPage.waitForLoadState('domcontentloaded');
-        return newPage;
+        await this.page.waitForLoadState('domcontentloaded');
+        return this.page;
     }
 
     /**
      * Verify the newsletter page opened correctly
-     * @param {Page} newPage - The new tab page object
+     * @param {Page} newsletterPage - The page navigated to the newsletter
      */
-    async verifyNewsletterPageOpened(newPage) {
-        const url = newPage.url();
+    async verifyNewsletterPageOpened(newsletterPage) {
+        const url = newsletterPage.url();
         return url.includes('partners.stormwind.com') && url.includes('newsletter');
     }
 
     /**
      * Verify URL contains expected domain
-     * @param {Page} newPage - The new tab page object
+     * @param {Page} newsletterPage - The page navigated to the newsletter
      */
-    async isOnCorrectDomain(newPage) {
-        return newPage.url().includes('partners.stormwind.com');
+    async isOnCorrectDomain(newsletterPage) {
+        return newsletterPage.url().includes('partners.stormwind.com');
     }
 
     /**
      * Verify URL contains newsletter
-     * @param {Page} newPage - The new tab page object
+     * @param {Page} newsletterPage - The page navigated to the newsletter
      */
-    async isNewsletterURL(newPage) {
-        return newPage.url().includes('newsletter');
+    async isNewsletterURL(newsletterPage) {
+        return newsletterPage.url().includes('newsletter');
     }
 
     /**
-     * Close the new tab
-     * @param {Page} newPage - The new tab page object
+     * Close the page
+     * @param {Page} newsletterPage - The page navigated to the newsletter
      */
-    async closeNewTab(newPage) {
-        await newPage.close();
+    async closeNewTab(newsletterPage) {
+        await newsletterPage.close();
     }
 }
 

@@ -20,6 +20,8 @@ class AdminAddUsersPage extends BasePage {
         // Description text
         this.groupDescriptionText = page.getByText(/You are adding new users to the group named/);
         this.licensesAvailableText = page.getByText(/licenses available/);
+        this.additionalUsersPrompt = page.getByText('Do you need access for additional users?');
+        this.additionalUsersLink = page.getByRole('link', { name: /Click here/i });
 
         // ========== USER INPUT FORM ==========
         // <input placeholder="First Name" id="edit-user-form-group-0-first-name">
@@ -106,6 +108,14 @@ class AdminAddUsersPage extends BasePage {
     async expectActionButtonsVisible() {
         await this.expectVisible(this.cancelBtn);
         await this.expectVisible(this.saveBtn);
+    }
+
+    /**
+     * Assert the additional-user information and request link are visible
+     */
+    async expectAdditionalUsersSectionVisible() {
+        await this.expectVisible(this.additionalUsersPrompt);
+        await this.expectVisible(this.additionalUsersLink);
     }
 
     /**

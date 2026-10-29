@@ -15,7 +15,6 @@ class AdminNavigationPage extends BasePage {
         this.learningPathsLink = page.getByRole('link', { name: 'Learning Paths' }).first();
         this.skillsAssessmentsLink = page.getByRole('link', { name: /skills?\s*assessments/i }).first();
         this.leaderboardLink = page.getByRole('link', { name: 'Leaderboard' });
-        this.adminLink = page.locator('li.main-menu-admin-link a.nav-link');
 
         // Search and user elements
         this.searchInput = page.getByPlaceholder('Search for a course');
@@ -69,11 +68,6 @@ class AdminNavigationPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
     }
 
-    async navigateToAdmin() {
-        await this.adminLink.click();
-        await this.page.waitForLoadState('domcontentloaded');
-    }
-
     // Admin sub-navigation methods
     async navigateToDashboard() {
         await this.dashboardTab.click();
@@ -114,9 +108,8 @@ class AdminNavigationPage extends BasePage {
         await this.expectVisible(this.learningPathsLink);
         await this.expectVisible(this.skillsAssessmentsLink);
         await this.expectVisible(this.leaderboardLink);
-        // adminLink (li.main-menu-admin-link) is only present on the dashboard URL;
-        // it is absent on other admin sub-pages. Admin link navigation is covered
-        // by admin-navigation.spec.js step 14 which always starts from the dashboard.
+        // The admin dashboard is reached through the admin sub-navigation; there
+        // is no separate "Admin" item in the main sidebar.
     }
 
     // Assertions - Admin sub-navigation
