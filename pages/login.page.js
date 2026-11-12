@@ -4,12 +4,12 @@ const URLS = require('../data/urls');
 class LoginPage extends BasePage {
     constructor(page) {
         super(page);
-        // Modern locators using Playwright's recommended strategies
-        this.emailInput = page.locator('#email-only');
-        this.enterButton = page.getByRole('button', { name: 'Enter' });
-        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-        this.loginButton = page.getByRole('button', { name: 'Log in' });
-        // Login errors render as a role="alert" region (there is no `.error-message` class).
+        // Single-step login form. Three forms share "Email" labels (main, magic-link,
+        // SSO), so scope to the standard Drupal field IDs to stay unambiguous.
+        this.emailInput = page.locator('#edit-name');
+        this.passwordInput = page.locator('#edit-pass');
+        this.loginButton = page.locator('#edit-submit');
+        // Login errors render as a role="alert" region.
         this.errorAlert = page.getByRole('alert');
     }
 
@@ -18,23 +18,16 @@ class LoginPage extends BasePage {
     }
 
     async login(email, password) {
-        // Step 1: Enter email and click Enter button
         await this.emailInput.fill(email);
-        await this.enterButton.click();
-
-        // Step 2: Wait for password field and enter password
-        await this.passwordInput.waitFor({ state: 'visible' });
         await this.passwordInput.fill(password);
         await this.loginButton.click();
     }
 
     async enterEmail(email) {
         await this.emailInput.fill(email);
-        await this.enterButton.click();
     }
 
     async enterPassword(password) {
-        await this.passwordInput.waitFor({ state: 'visible' });
         await this.passwordInput.fill(password);
     }
 
@@ -62,12 +55,17 @@ class LoginPage extends BasePage {
 
     // REUSE_METHOD: expectRedirectedToClassroom
     async expectRedirectedToClassroom() {
-        await this.expectUrl(/\/my_classroom\//);
+        await this.page.waitForURL(/\/my_classroom\//, { timeout: 30000 });
     }
 
     // REUSE_METHOD: expectRedirectedToTeamReporting
     async expectRedirectedToTeamReporting() {
-        await this.expectUrl(/\/team\/\d+\/reporting/);
+        await this.page.waitForURL(/\/team\/\d+\/reporting/, { timeout: 30000 });
+    }
+
+    // REUSE_METHOD: expectRedirectedAwayFromLogin
+    async expectRedirectedAwayFromLogin() {
+        await this.page.waitForURL(url => !url.href.includes('/user/login'), { timeout: 30000 });
     }
 
     async expectEmailFieldHidden() {

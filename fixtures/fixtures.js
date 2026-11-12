@@ -57,7 +57,10 @@ const test = base.extend({
         const loginPage = new LoginPage(page);
         await page.goto(URLS.LOGIN);
         await loginPage.login(users.admin.email, users.admin.password);
-        await page.waitForLoadState('domcontentloaded');
+        // Wait for the full post-login redirect chain to settle on the reporting page.
+        // waitForLoadState('domcontentloaded') fires on the interim redirect page,
+        // causing ERR_ABORTED if the test navigates before the chain completes.
+        await page.waitForURL(/\/team\/\d+\/reporting/, { timeout: 30000 });
         await use(page);
     },
 
@@ -66,7 +69,8 @@ const test = base.extend({
         const loginPage = new LoginPage(page);
         await page.goto(URLS.LOGIN);
         await loginPage.login(users.student.email, users.student.password);
-        await page.waitForLoadState('domcontentloaded');
+        // Wait for the full post-login redirect chain to settle on My Classroom.
+        await page.waitForURL(/\/my_classroom\//, { timeout: 30000 });
         await use(page);
     },
 

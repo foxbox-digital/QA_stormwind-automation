@@ -28,7 +28,9 @@ class StudentCourseDetailsPage extends BasePage {
 
         // After adding to classroom
         this.progressComplete = page.getByText(/\d+% complete/);
-        this.startBtn = page.getByRole('link', { name: /START/i });
+        // .first() disambiguates: multiple START-labelled links can appear simultaneously
+        // (hero CTA + per-lesson links), causing strict-mode violations on waitFor.
+        this.startBtn = page.getByRole('link', { name: /START/i }).first();
         // Redesigned toggle: a single js-course-flag button whose label flips between
         // "Add to Classroom" and "Remove from Classroom". In the added state it reads
         // "Remove from Classroom" (the same-named <a> fallbacks are role=link and hidden,

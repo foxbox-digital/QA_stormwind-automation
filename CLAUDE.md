@@ -209,3 +209,12 @@ Tests authenticate through Playwright fixtures:
 - `studentPage` → logs in as `users.student`
 
 Always use an authenticated fixture, not a bare `page` fixture, in specs.
+
+## Development rules
+
+- *Conventional Commits* for every commit message. Format: `<type>(<scope>)?: <description>`, e.g. `feat(auth): add Apple Sign-In verifier`, `fix(search): clamp relevance score to [0,1]`, `chore: bump dependency`. See https://www.conventionalcommits.org/en/v1.0.0/. Allowed types: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `perf`, `build`, `ci`, `style`. Breaking changes get `!` after the type or a `BREAKING CHANGE:` footer.
+- *Branch naming:* `<type>/<description>`, e.g. `feat/add-apple-signin`, `fix/clamp-relevance-score`. Never work on the main branch. Create a new branch for every feature or bug fix.
+- *Commit in logical chunks*, not one mega-commit. Each commit should be a coherent unit that builds and passes tests on its own.
+- *Quality gates before every commit:* tests must pass, and the project's formatter, linter, type checker and strict compile must be clean. Fix what they report. Do not suppress errors or loosen rules to get green. Where a complexity or lint limit exists as a ratchet at today's worst offenders, lower it as code gets refactored, never raise it.
+- *Keep docs and schema in sync:* when changing the API, update the API docs in the same commit. When changing the database schema, include the migration file in the same commit.
+- *Open a Pull Request after implementing a plan*, targeting the repo's integration branch. Review it with `/code-review` at medium effort, run from a fresh subagent so the reviewer has no implementation context, and apply findings with `--fix` (medium effort already limits it to higher-confidence findings: reasonable fixes, not a push for perfect software). Report back which findings were fixed vs. skipped, and why. Commit fixes separately. This delegates deciding what to clean up, not whether to merge: the PR still waits on a human sign-off before that.

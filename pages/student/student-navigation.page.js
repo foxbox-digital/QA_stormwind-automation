@@ -29,6 +29,9 @@ class StudentNavigationPage extends BasePage {
         this.menuMyGoals = page.getByRole('link', { name: /^\s*My Goals\s*$/i }).first();
         this.menuLogout = page.getByRole('link', { name: /^\s*Log ?out\s*$/i }).first();
 
+        // Global nav search (Drupal Views search API field — id is stable)
+        this.navSearchInput = page.locator('#edit-search-api-fulltext');
+
         // Sidebar links (right side)
         this.sidebarWebinars = page.getByRole('link', { name: ' Webinars' }).first();
         this.sidebarNewsletter = page.getByRole('link', { name: ' Newsletter' }).first();
@@ -45,11 +48,13 @@ class StudentNavigationPage extends BasePage {
     }
 
     async navigateToCourses() {
+        await this.dismissNotificationPopup();
         await this.coursesLink.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
 
     async navigateToLearningPaths() {
+        await this.dismissNotificationPopup();
         await this.learningPathsLink.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
@@ -93,6 +98,23 @@ class StudentNavigationPage extends BasePage {
     async clickMyLiveSchedule() {
         await this.sidebarMyLiveSchedule.click();
         // Modal opens, no page navigation
+    }
+
+    async searchCourses(term) {
+        await this.navSearchInput.fill(term);
+        await this.navSearchInput.press('Enter');
+        await this.page.waitForLoadState('domcontentloaded');
+    }
+
+    async logout() {
+        // Direct navigation is more reliable than the dropdown interaction,
+        // which can close before the click resolves on some page contexts.
+        await this.page.goto('/user/logout');
+        await this.page.waitForLoadState('domcontentloaded');
+    }
+
+    async expectNavSearchVisible() {
+        await this.expectVisible(this.navSearchInput);
     }
 
     // Assertions - Main navigation

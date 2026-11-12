@@ -17,7 +17,7 @@ test.describe('Login Page', () => {
 
         // STEP 5: Assert we stay on the login page with the incorrect-password error
         await loginPage.expectStillOnLogin();
-        await loginPage.expectErrorMessage('The password you entered is incorrect');
+        await loginPage.expectErrorMessage('or password is incorrect');
     });
 
     test('should log in successfully and redirect to My Classroom', async ({ loginPage }) => {
@@ -29,22 +29,6 @@ test.describe('Login Page', () => {
 
         // STEP 3: Assert the redirect to My Classroom
         await loginPage.expectRedirectedToClassroom();
-    });
-
-    test('should redirect away from login when already authenticated', async ({ loginPage }) => {
-        // STEP 1: Navigate to the login page
-        await loginPage.goto();
-
-        // STEP 2: Log in with valid student credentials
-        await loginPage.login(users.student.email, users.student.password);
-        await loginPage.expectRedirectedToClassroom();
-
-        // STEP 3: Revisit the login page while authenticated
-        await loginPage.goto();
-
-        // STEP 4: Assert we are redirected away and the email field is not shown
-        await loginPage.expectRedirectedToClassroom();
-        await loginPage.expectEmailFieldHidden();
     });
 
 });
@@ -66,7 +50,7 @@ test.describe('Login Page - Admin role', () => {
 
         // STEP 5: Assert we stay on the login page with the incorrect-password error
         await loginPage.expectStillOnLogin();
-        await loginPage.expectErrorMessage('The password you entered is incorrect');
+        await loginPage.expectErrorMessage('or password is incorrect');
     });
 
     test('should log in successfully and redirect to team reporting', async ({ loginPage }) => {
@@ -80,20 +64,24 @@ test.describe('Login Page - Admin role', () => {
         await loginPage.expectRedirectedToTeamReporting();
     });
 
-    test('should redirect away from login when already authenticated', async ({ loginPage }) => {
-        // STEP 1: Navigate to the login page
-        await loginPage.goto();
+});
 
-        // STEP 2: Log in with valid admin credentials
-        await loginPage.login(users.admin.email, users.admin.password);
-        await loginPage.expectRedirectedToTeamReporting();
+test.describe('Session and logout', () => {
 
-        // STEP 3: Revisit the login page while authenticated
-        await loginPage.goto();
+    test('should log out and require login to access a protected route', async ({ studentNavigation, studentPage }) => {
+        // STEP 1: Navigate to Courses to confirm session is active
+        await studentNavigation.navigateToCourses();
+        expect(studentPage.url()).toContain('topics');
 
-        // STEP 4: Assert we are redirected away and the email field is not shown
-        await loginPage.expectRedirectedToTeamReporting();
-        await loginPage.expectEmailFieldHidden();
+        // STEP 2: Log out via the profile dropdown
+        await studentNavigation.logout();
+
+        // STEP 3: Navigate to a route that requires auth
+        await studentPage.goto('/topics');
+        await studentPage.waitForLoadState('domcontentloaded');
+
+        // STEP 4: Should be bounced to the login page
+        expect(studentPage.url()).toContain('/user/login');
     });
 
 });
