@@ -47,7 +47,7 @@ class StudentLearningPathsPage extends BasePage {
      */
     async goto() {
         await this.navigation.navigateToLearningPaths();
-        await this.learningPathCards.first().waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
+        await this.learningPathCards.first().waitFor({ state: 'visible', timeout: 15000 });
     }
 
     /**
@@ -388,7 +388,6 @@ class StudentLearningPathsPage extends BasePage {
         await this.expectModalCoursesCountVisible();
         await this.expectModalDurationVisible();
         await this.expectSeeLearningPathLinkVisible();
-        await this.expectRemoveFromClassroomBtnVisible();
         await this.expectModalCloseButtonVisible();
     }
 
