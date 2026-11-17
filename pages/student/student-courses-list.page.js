@@ -53,10 +53,10 @@ class StudentCoursesListPage extends BasePage {
         this.filterCertificationBased = page.locator('button, div').filter({ hasText: 'Certification-Based' }).first();
         this.filterTopic = page.locator('button, div').filter({ hasText: 'Topic' }).first();
 
-        // Course cards
-        this.courseCards = page.locator('.course-card, [class*="course-card"]');
-        this.courseCardTitles = page.locator('.course-card__title, [class*="course-card"] h3, [class*="course-card"] h4');
-        this.courseCardTitleLinks = page.locator('a.course-meta__title');
+        // Exclude condensed cards — those live in a hidden featured_courses section in Drupal 11
+        this.courseCards = page.locator('.course-card:not(.course-card--condensed)');
+        this.courseCardTitles = page.locator('.course-card__title');
+        this.courseCardTitleLinks = page.locator('button.modal-toggle');
 
         // Course Preview Modal - uses .course-preview-modal.modal.fade.show
         this.courseModal = page.locator('.course-preview-modal.show');
@@ -95,6 +95,7 @@ class StudentCoursesListPage extends BasePage {
      * Click on Palo Alto chip
      */
     async clickPaloAltoChip() {
+        await this.dismissNotificationPopup();
         await this.chipPaloAlto.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
@@ -150,7 +151,8 @@ class StudentCoursesListPage extends BasePage {
      * @param {string} courseTitle - The course title link to click
      */
     async clickCourseCardTitleLink(courseTitle) {
-        const titleLink = this.page.locator('a.course-meta__title').filter({ hasText: courseTitle });
+        await this.dismissNotificationPopup();
+        const titleLink = this.page.locator('button.modal-toggle').filter({ hasText: courseTitle });
         await titleLink.click();
         await this.courseModal.waitFor({ state: 'visible', timeout: 10000 });
     }
@@ -278,7 +280,8 @@ class StudentCoursesListPage extends BasePage {
      * Assert course cards are visible
      */
     async expectCourseCardsVisible() {
-        await this.courseCards.first().waitFor({ state: 'visible', timeout: 10000 });
+        await this.dismissNotificationPopup();
+        await this.courseCards.first().waitFor({ state: 'visible', timeout: 30000 });
         const count = await this.getCourseCardsCount();
         if (count === 0) {
             throw new Error('No course cards found');

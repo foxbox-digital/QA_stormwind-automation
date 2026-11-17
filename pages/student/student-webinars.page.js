@@ -14,11 +14,10 @@ class StudentWebinarsPage extends BasePage {
         this.navigation = new StudentNavigationPage(page);
         this.footer = new StudentFooterPage(page);
 
-        // Page header
-        this.pageTitle = page.getByText(/Explore upcoming Stormwind webinars/i).first();
+        this.pageTitle = page.getByRole('heading', { name: 'Webinars' });
 
         // Search
-        this.searchInput = page.getByPlaceholder('Search for a webinar');
+        this.searchInput = page.locator('#edit-search-api-fulltext');
         this.searchButton = page.locator('.search-button, button[type="submit"]');
 
         // Webinar cards
@@ -41,8 +40,7 @@ class StudentWebinarsPage extends BasePage {
     // Search functionality
     async searchWebinar(searchTerm) {
         await this.searchInput.fill(searchTerm);
-        await this.searchInput.press('Enter');
-        await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(500);
     }
 
     async clearSearch() {

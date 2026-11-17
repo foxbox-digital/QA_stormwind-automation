@@ -88,7 +88,7 @@ class StudentCourseCategoryTabsPage extends BasePage {
     // Scroll right until the right chevron becomes inactive (fully scrolled to end).
     // Waits after each click for the scroll animation and inactive-class update to settle.
     async scrollToEnd() {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 15; i++) {
             if (await this.page.locator('button.courses-parent-tabs__arrow--right:not(.inactive)').count() === 0) break;
             await this.scrollRightButtonActive.dispatchEvent('click');
             await this.page.locator('button.courses-parent-tabs__arrow--right.inactive')

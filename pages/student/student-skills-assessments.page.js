@@ -15,14 +15,10 @@ class StudentSkillsAssessmentsPage extends BasePage {
         this.navigation = new StudentNavigationPage(page);
         this.footer = new StudentFooterPage(page);
 
-        // Page heading
-        this.pageHeading = page.getByText('Explore Stormwind Skills Assessments.');
+        this.pageHeading = page.getByRole('heading', { name: 'Skills Assessment' });
+        this.searchInput = page.locator('#edit-search-api-fulltext');
 
-        // Search input - use placeholder to uniquely target the skills assessment search
-        this.searchInput = page.locator('input[placeholder="Search for a skills assessment"]');
-
-        // Assessment cards - use the specific card container class
-        this.assessmentCards = page.locator('.course-card--condensed');
+        this.assessmentCards = page.locator('.course-card.sw-card--skills-assessment');
 
         // Card title (for finding specific cards)
         this.cardTitle = page.locator('.course-card__title');
@@ -45,6 +41,7 @@ class StudentSkillsAssessmentsPage extends BasePage {
      */
     async goto() {
         await this.navigation.navigateToSkillsAssessments();
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
     }
 
     /**
@@ -87,10 +84,9 @@ class StudentSkillsAssessmentsPage extends BasePage {
     async searchAssessment(assessmentName) {
         await this.searchInput.click();
         await this.searchInput.fill(assessmentName);
-        // Press Enter to trigger search
         await this.searchInput.press('Enter');
-        // Wait for DOM to be ready (networkidle can hang on AJAX search pages)
         await this.page.waitForLoadState('domcontentloaded');
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
     }
 
     /**
@@ -204,7 +200,7 @@ class StudentSkillsAssessmentsPage extends BasePage {
      * Assert assessment cards are visible
      */
     async expectAssessmentCardsVisible() {
-        // Wait for at least one card to appear (cards load asynchronously)
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
         await this.assessmentCards.first().waitFor({ state: 'visible', timeout: 10000 });
         const count = await this.getAssessmentsCount();
         if (count === 0) {

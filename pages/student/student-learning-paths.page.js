@@ -15,8 +15,7 @@ class StudentLearningPathsPage extends BasePage {
         this.navigation = new StudentNavigationPage(page);
         this.footer = new StudentFooterPage(page);
 
-        // Page heading - use getByText as it may not be a semantic heading element
-        this.pageHeading = page.getByText('Browse our catalog to find the best Learning Path for you.');
+        this.pageHeading = page.getByRole('heading', { name: 'Learning Paths' });
 
         // Topic dropdown - it's a button with title="Topic" and class multiselect dropdown-toggle
         this.topicDropdown = page.locator('button[title="Topic"]');
@@ -27,8 +26,7 @@ class StudentLearningPathsPage extends BasePage {
         // Search input - input with class search-term and specific placeholder
         this.searchInput = page.locator('input.search-term');
 
-        // Learning path cards - use the specific card container class
-        this.learningPathCards = page.locator('.learning-path-card--condensed');
+        this.learningPathCards = page.locator('.learning-path-card');
 
         // Learning Path Modal elements - scoped to modal container
         this.modal = page.locator('.modal.show, .modal[style*="display: block"]');
@@ -49,6 +47,7 @@ class StudentLearningPathsPage extends BasePage {
      */
     async goto() {
         await this.navigation.navigateToLearningPaths();
+        await this.learningPathCards.first().waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
     }
 
     /**
