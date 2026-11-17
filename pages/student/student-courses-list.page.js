@@ -163,33 +163,25 @@ class StudentCoursesListPage extends BasePage {
      * @returns {Promise<string>} The title of the course clicked
      */
     async clickFirstActualCourse() {
-        // Find course cards that have "By:" text (indicating an instructor, meaning it's a course not a skills assessment)
-        const courseCardsWithInstructor = this.page.locator('a.course-meta__title').filter({
-            has: this.page.locator('xpath=ancestor::div[contains(@class, "course-card")]//span[contains(text(), "By:")]')
-        });
-
-        // If no courses with instructor found, try clicking the first course that's not a skills assessment
-        const allCourseLinks = this.page.locator('a.course-meta__title');
-        const count = await allCourseLinks.count();
+        const allCourseButtons = this.page.locator('button.modal-toggle');
+        const count = await allCourseButtons.count();
 
         for (let i = 0; i < count; i++) {
-            const link = allCourseLinks.nth(i);
-            const card = link.locator('xpath=ancestor::div[contains(@class, "course-card") or contains(@class, "course-meta")]');
+            const btn = allCourseButtons.nth(i);
+            const card = btn.locator('xpath=ancestor::div[contains(@class, "course-card")]');
             const cardText = await card.textContent();
 
-            // Skip skills assessments
             if (!cardText.includes('Skills Assessment')) {
-                const title = await link.textContent();
-                await link.click();
+                const title = await btn.textContent();
+                await btn.click();
                 await this.courseModal.waitFor({ state: 'visible', timeout: 10000 });
                 return title.trim();
             }
         }
 
-        // Fallback: click first course link anyway
-        const firstLink = allCourseLinks.first();
-        const title = await firstLink.textContent();
-        await firstLink.click();
+        const firstBtn = allCourseButtons.first();
+        const title = await firstBtn.textContent();
+        await firstBtn.click();
         await this.courseModal.waitFor({ state: 'visible', timeout: 10000 });
         return title.trim();
     }

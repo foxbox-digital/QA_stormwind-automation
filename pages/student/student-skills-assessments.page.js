@@ -41,7 +41,7 @@ class StudentSkillsAssessmentsPage extends BasePage {
      */
     async goto() {
         await this.navigation.navigateToSkillsAssessments();
-        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 });
     }
 
     /**
@@ -86,7 +86,7 @@ class StudentSkillsAssessmentsPage extends BasePage {
         await this.searchInput.fill(assessmentName);
         await this.searchInput.press('Enter');
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 });
     }
 
     /**
@@ -200,7 +200,7 @@ class StudentSkillsAssessmentsPage extends BasePage {
      * Assert assessment cards are visible
      */
     async expectAssessmentCardsVisible() {
-        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+        await this.page.locator('.skills-assessment-page__loading').waitFor({ state: 'hidden', timeout: 15000 });
         await this.assessmentCards.first().waitFor({ state: 'visible', timeout: 10000 });
         const count = await this.getAssessmentsCount();
         if (count === 0) {

@@ -40,7 +40,8 @@ class StudentWebinarsPage extends BasePage {
     // Search functionality
     async searchWebinar(searchTerm) {
         await this.searchInput.fill(searchTerm);
-        await this.page.waitForTimeout(500);
+        await this.searchInput.press('Enter');
+        await this.page.waitForLoadState('domcontentloaded');
     }
 
     async clearSearch() {
