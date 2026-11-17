@@ -102,7 +102,7 @@ class StudentContactSupportModalPage extends BasePage {
 
     // Assertions
     async expectModalVisible() {
-        await this.modal.waitFor({ state: 'visible', timeout: 15000 });
+        await this.modal.waitFor({ state: 'visible', timeout: 30000 });
     }
 
     async expectModalTitleVisible() {

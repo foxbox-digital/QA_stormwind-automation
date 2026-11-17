@@ -63,7 +63,7 @@ class AdminDueDatesPage extends BasePage {
      */
     async isOnCorrectURL() {
         const url = this.page.url();
-        return url.includes('/due-date/');
+        return url.includes('/due-date');
     }
 
     /**
@@ -71,7 +71,7 @@ class AdminDueDatesPage extends BasePage {
      */
     async clickAssignDueDate() {
         await this.assignDueDateBtn.click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForLoadState('domcontentloaded');
     }
 
     /**

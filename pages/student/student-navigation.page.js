@@ -87,7 +87,6 @@ class StudentNavigationPage extends BasePage {
 
     async clickContactSupport() {
         await this.sidebarContactSupport.click();
-        await this.page.waitForLoadState('domcontentloaded');
     }
 
     async clickSendIdeas() {

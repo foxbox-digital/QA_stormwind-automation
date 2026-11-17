@@ -33,25 +33,25 @@ test.describe('Student - Footer Tests', () => {
 
         // STEP 7: Click Courses link in footer and verify navigation
         await studentFooter.clickExploreCourses();
-        expect(studentMyClassroom.page.url()).toContain('/topics');
+        await expect(studentMyClassroom.page).toHaveURL(/\/topics/, { timeout: 10000 });
 
         // STEP 8: Go back and verify Learning Paths footer link navigates correctly
         await studentMyClassroom.navigateFromNav();
         await studentFooter.scrollToFooter();
         await studentFooter.clickExploreLearningPaths();
-        expect(studentMyClassroom.page.url()).toContain('/learningpaths');
+        await expect(studentMyClassroom.page).toHaveURL(/\/learningpaths/, { timeout: 10000 });
 
         // STEP 9: Go back and verify Skill Assessments footer link navigates correctly
         await studentMyClassroom.navigateFromNav();
         await studentFooter.scrollToFooter();
         await studentFooter.clickExploreSkillAssessments();
-        expect(studentMyClassroom.page.url()).toContain('/skillsassessment');
+        await expect(studentMyClassroom.page).toHaveURL(/\/skillsassessment/, { timeout: 10000 });
 
         // STEP 10: Go back and verify Live Course Calendar footer link navigates correctly
         await studentMyClassroom.navigateFromNav();
         await studentFooter.scrollToFooter();
         await studentFooter.clickExploreLiveCourseCalendar();
-        expect(studentMyClassroom.page.url()).toContain('calendar');
+        await expect(studentMyClassroom.page).toHaveURL(/calendar/, { timeout: 10000 });
     });
 
     test('should navigate to Webinars from footer Explore section', async ({ studentFooter, studentMyClassroom }) => {
