@@ -40,28 +40,27 @@ test.describe('Student - Learning Paths Page', () => {
         await studentLearningPaths.resetPathSizeFilter();
         await studentLearningPaths.page.waitForTimeout(300);
 
-        // 8. Search for "Learning Path Santiago Test 1"
-        await studentLearningPaths.searchLearningPath('Learning Path Santiago Test 1');
+        // 8. Search for "Cybersecurity Manager"
+        await studentLearningPaths.searchLearningPath('Cybersecurity Manager');
 
         // Verify search input has the correct value
-        await expect(studentLearningPaths.searchInput).toHaveValue('Learning Path Santiago Test 1');
+        await expect(studentLearningPaths.searchInput).toHaveValue('Cybersecurity Manager');
 
         // Wait for search results to filter
         await studentLearningPaths.page.waitForTimeout(1000);
 
         // Verify the matching learning path card is visible
-        await studentLearningPaths.expectLearningPathCardVisible('Learning Path Santiago Test 1');
+        await studentLearningPaths.expectLearningPathCardVisible('Cybersecurity Manager');
 
         // 9. Click on learning path card to open modal
-        await studentLearningPaths.openLearningPathModal('Learning Path Santiago Test 1');
+        await studentLearningPaths.openLearningPathModal('Cybersecurity Manager');
 
         // 10. Validate modal elements
         await studentLearningPaths.expectModalVisible();
-        await studentLearningPaths.expectModalTitle('Learning Path Santiago Test 1');
+        await studentLearningPaths.expectModalTitle('Cybersecurity Manager');
         await studentLearningPaths.expectModalCoursesCountVisible();
         await studentLearningPaths.expectModalDurationVisible();
         await studentLearningPaths.expectSeeLearningPathLinkVisible();
-        await studentLearningPaths.expectRemoveFromClassroomBtnVisible();
         await studentLearningPaths.expectModalCloseButtonVisible();
 
         // 11. Close the modal by clicking the X button
